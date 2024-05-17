@@ -33,11 +33,9 @@ const MessageCard = ({ message, me, other }) => {
         }`}
       >
         {message.image && (
-          <Image
-            className="object-cover rounded-lg mb-2"
+          <img
+            className="h-60 w-60 object-cover rounded-lg mb-2"
             src={message.image}
-            width={60}
-            height={60}
             alt="image"
           />
         )}

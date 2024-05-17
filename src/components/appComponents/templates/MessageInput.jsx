@@ -85,11 +85,9 @@ const MessageInput = ({
               <DialogTitle>Upload the image</DialogTitle>
               <DialogDescription>
                 {imagePreview && (
-                  <Image
+                  <img
                     src={imagePreview}
                     className="max-h-60 w-60 mb-4"
-                    width={60}
-                    height={60}
                     alt="image"
                   />
                 )}
