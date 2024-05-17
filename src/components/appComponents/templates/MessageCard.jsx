@@ -11,8 +11,6 @@ const MessageCard = ({ message, me, other }) => {
     return momentDate.fromNow();
   };
 
-  console.log("🚀 ~ MessageCard ~ message:", message);
-
   return (
     <div
       className={`flex mb-4 ${

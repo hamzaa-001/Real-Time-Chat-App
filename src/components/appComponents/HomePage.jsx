@@ -29,8 +29,6 @@ const HomePage = () => {
     return () => unSubscribe();
   }, [auth, router]);
 
-  console.log("User from main:", user);
-
   return (
     <>
       <div className="flex bg-slate-900 h-screen w-full overflow-hidden ">

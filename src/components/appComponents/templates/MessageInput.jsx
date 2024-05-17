@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPaperclip } from "react-icons/fa6";
 import { FaPaperPlane } from "react-icons/fa6";
 import { app } from "@/lib/firebase";
@@ -56,9 +56,7 @@ const MessageInput = ({
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setUploadProgress(progress);
       },
-      (error) => {
-        console.log("🚀 ~ uploadTask.on ~ error:", error);
-      },
+      (error) => {},
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImage(downloadURL);
@@ -68,6 +66,13 @@ const MessageInput = ({
       }
     );
   };
+
+  const handleKeyPress = (e) => {
+    if (e.key == "Enter") {
+      sendMessage();
+    }
+  };
+  window.addEventListener("keydown", handleKeyPress);
 
   return (
     <div>

@@ -17,8 +17,6 @@ import MessageCard from "./MessageCard";
 import MessageInput from "./MessageInput";
 
 const ChatRoom = ({ user, selectedChatRoom }) => {
-  console.log("🚀 ~ ChatRoom ~ selectedChatRoom:", selectedChatRoom);
-
   const me = selectedChatRoom?.myData;
   const other = selectedChatRoom?.otherData;
   const chatRoomId = selectedChatRoom?.id;
