@@ -6,7 +6,7 @@ const ToggleDivs = ({ name, latestMessage, time, type }) => {
     <div className="flex flex-col gap-5">
       {type == "users" && (
         <>
-          <ul class="">
+          <ul>
             <li className="">
               <div className="flex justify-start items-center gap-2 mt-3">
                 <Image
@@ -29,10 +29,10 @@ const ToggleDivs = ({ name, latestMessage, time, type }) => {
       )}
       {type == "chatroom" && (
         <>
-          <ul class="space-y-1">
+          <ul>
             <li>
               <div className="flex justify-between gap-2 items-center ">
-                <div className="flex gap-2 justify-center items-center  ">
+                <div className="flex gap-2 justify-center items-center mt-3 ">
                   <Image
                     src={userProfile}
                     width={40}

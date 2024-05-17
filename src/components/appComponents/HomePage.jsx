@@ -11,6 +11,7 @@ import ChatRoom from "@/components/appComponents/templates/ChatRoom";
 const HomePage = () => {
   const auth = getAuth(app);
   const [user, setUser] = useState(null);
+  const [selectedChatRoom, setSelectedChatRoom] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -18,7 +19,7 @@ const HomePage = () => {
       if (user) {
         const useRef = doc(firestore, "users", user.uid);
         const userSnap = await getDoc(useRef);
-        const userData = userSnap.data();
+        const userData = { id: userSnap.id, ...userSnap.data() };
         setUser(userData);
       } else {
         setUser(null);
@@ -28,14 +29,16 @@ const HomePage = () => {
     return () => unSubscribe();
   }, [auth, router]);
 
+  console.log("User from main:", user);
+
   return (
     <>
-      <div className="flex bg-slate-900 h-screen w-full overflow-auto mb-20">
-        <div className="flex flex-col gap-5 w-1/4 h-screen py-10 px-5 shadow-lg">
-          <User userData={user} />
+      <div className="flex bg-slate-900 h-screen w-full overflow-hidden ">
+        <div className="flex flex-col gap-5 w-1/4 h-screen py-10 px-5 shadow-lg bg-slate-950 rounded-xl">
+          <User userData={user} setSelectedChatRoom={setSelectedChatRoom} />
         </div>
         <div className="w-3/4 py-10 px-5">
-          <ChatRoom />
+          <ChatRoom user={user} selectedChatRoom={selectedChatRoom} />
         </div>
       </div>
     </>

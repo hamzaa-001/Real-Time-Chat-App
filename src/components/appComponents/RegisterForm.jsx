@@ -42,7 +42,6 @@ const RegisterForm = () => {
         formik.resetForm();
       } catch (error) {
         if (error instanceof FirebaseError) {
-          // Handle Firebase errors
           switch (error.code) {
             case "auth/email-already-in-use":
               console.error("Email already in use");
@@ -60,7 +59,6 @@ const RegisterForm = () => {
               console.error("Unknown Firebase error", error);
           }
         } else {
-          // Handle other errors
           console.error("Unknown error", error);
         }
       } finally {
@@ -205,7 +203,10 @@ const RegisterForm = () => {
 
                 <p className="mt-4 text-sm text-white sm:mt-0">
                   Already have an account? &nbsp;
-                  <Link href="/login">Login</Link>.
+                  <Link href="/login" className="underline">
+                    Login
+                  </Link>
+                  .
                 </p>
               </div>
             </form>

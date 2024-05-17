@@ -8,18 +8,20 @@ import {
   onSnapshot,
   query,
   addDoc,
-  querySnapshot,
-  doc,
+  getDocs,
+  serverTimestamp,
+  where,
 } from "firebase/firestore";
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { FaPowerOff } from "react-icons/fa";
+import toast from "react-hot-toast";
 
-const Users = ({ userData }) => {
+const Users = ({ userData, setSelectedChatRoom }) => {
   const [activeTab, setActiveTab] = useState("users");
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState([]);
-  const [userChatRoom, setUserChatRoom] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [userChatRooms, setUserChatRooms] = useState([]);
   const auth = getAuth(app);
   const router = useRouter();
 
@@ -29,48 +31,138 @@ const Users = ({ userData }) => {
 
   useEffect(() => {
     setLoading(true);
-    const testQuery = query(collection(firestore, "users"));
+    const usersQuery = query(collection(firestore, "users"));
 
-    const unSubscribe = onSnapshot(testQuery, (querySnapshot) => {
+    const unSubscribe = onSnapshot(usersQuery, (querySnapshot) => {
       const users = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      setUser(users);
+      setUsers(users);
       setLoading(false);
     });
+
     return unSubscribe;
   }, []);
 
-  console.log("Users:", user);
+  console.log("UsersData ID:", userData?.id);
 
   const handleLogout = () => {
     signOut(auth).then(() => {
       router.push("/login");
     });
   };
+
+  useEffect(() => {
+    if (!userData) {
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    console.log("Fetching chatrooms for user:", userData.id);
+
+    const chatRoomsQuery = query(
+      collection(firestore, "chatrooms"),
+      where("users", "array-contains", userData.id)
+    );
+
+    const unSubscribe = onSnapshot(chatRoomsQuery, (querySnapshot) => {
+      if (!querySnapshot.empty) {
+        const chatrooms = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setUserChatRooms(chatrooms);
+        console.log("Fetched chatrooms:", chatrooms);
+      } else {
+        console.log("No chatrooms found for this user.");
+      }
+      setLoading(false);
+    });
+
+    return unSubscribe;
+  }, [userData]);
+
+  const createChat = async (otherUser) => {
+    if (!userData) {
+      toast.error("User data is not available");
+      return;
+    }
+
+    console.log("Creating chat with user:", otherUser.id);
+
+    const existingChatRoomQuery = query(
+      collection(firestore, "chatrooms"),
+      where("users", "array-contains", userData.id)
+    );
+
+    try {
+      const existingChatRoomSnapshot = await getDocs(existingChatRoomQuery);
+
+      if (!existingChatRoomSnapshot.empty) {
+        toast.error("ChatRoom already exists");
+        console.log(
+          "ChatRoom already exists for users:",
+          userData.id,
+          otherUser.id
+        );
+        return;
+      }
+
+      const chatRoomData = {
+        users: [userData.id, otherUser.id],
+        userData: {
+          [userData.id]: userData,
+          [otherUser.id]: otherUser,
+        },
+        timestamp: serverTimestamp(),
+        lastMessage: null,
+      };
+
+      const chatRoomRef = await addDoc(
+        collection(firestore, "chatrooms"),
+        chatRoomData
+      );
+      console.log("ChatRoom Created with id", chatRoomRef.id);
+      setActiveTab("chatroom");
+    } catch (error) {
+      console.log("Error creating chat room:", error.message);
+    }
+  };
+
+  const openChat = (chatRoom) => {
+    const data = {
+      id: chatRoom.id,
+      myData: userData,
+      otherData:
+        chatRoom.userData[chatRoom.users.find((id) => id !== userData?.id)],
+    };
+
+    setSelectedChatRoom(data);
+  };
+
   return (
-    <>
+    <div>
       <div className="flex justify-between">
         <button
-          className={` rounded-md px-4 py-2 text-sm  focus:relative dark:text-gray-400 dark:hover:text-gray-200 ${
+          className={`rounded-md px-4 py-2 text-sm focus:relative ${
             activeTab === "users" ? "bg-white" : "text-white"
           }`}
           onClick={() => handleTabClick("users")}
         >
           Users
         </button>
-
         <button
-          className={`rounded-md px-4 py-2 text-sm  shadow-sm focus:relative dark:bg-gray-800 ${
+          className={`rounded-md px-4 py-2 text-sm shadow-sm focus:relative ${
             activeTab === "chatroom" ? "bg-white" : "text-white"
-          } `}
+          }`}
           onClick={() => handleTabClick("chatroom")}
         >
           Chatroom
         </button>
         <button
-          className="rounded-md px-4 py-2 text-sm  shadow-sm focus:relative text-white dark:bg-gray-800"
+          className="rounded-md px-4 py-2 text-sm shadow-sm focus:relative text-white"
           onClick={handleLogout}
         >
           <FaPowerOff className="text-2xl text-red-900" />
@@ -82,17 +174,23 @@ const Users = ({ userData }) => {
           <div>
             <h1 className="text-white text-2xl font-bold my-5">Users</h1>
             {loading ? (
-              <p>loading....</p>
+              <p className="text-white">Loading...</p>
             ) : (
-              user?.map(
+              users?.map(
                 (user, index) =>
                   user?.id !== userData?.id && (
-                    <ToggleDivs
-                      key={index}
-                      name={user.full_name}
-                      time="2h ago"
-                      type="users"
-                    />
+                    <div
+                      key={user?.id}
+                      className="cursor-pointer"
+                      onClick={() => createChat(user)}
+                    >
+                      <ToggleDivs
+                        key={index}
+                        name={user.full_name}
+                        time="2h ago"
+                        type="users"
+                      />
+                    </div>
                   )
               )
             )}
@@ -101,16 +199,37 @@ const Users = ({ userData }) => {
         {activeTab === "chatroom" && (
           <div>
             <h1 className="text-white text-2xl font-bold my-5">Chatroom</h1>
-            <ToggleDivs
-              type={"chatroom"}
-              name={"Hamza Shahid"}
-              time={"5:30 PM"}
-              latestMessage={"Hello there"}
-            />
+            {userChatRooms.length === 0 ? (
+              <p className="text-white">No chatrooms found.</p>
+            ) : (
+              userChatRooms.map((chatRoom) => {
+                const otherUserId = chatRoom.users.find(
+                  (id) => id !== userData.id
+                );
+                const otherUserData = chatRoom.userData[otherUserId];
+                return (
+                  <div
+                    key={chatRoom.id}
+                    className="cursor-pointer"
+                    onClick={() => openChat(chatRoom)}
+                  >
+                    <ToggleDivs
+                      key={chatRoom.id}
+                      type="chatroom"
+                      name={otherUserData?.full_name || "Chatroom"}
+                      time={
+                        chatRoom.timestamp?.toDate().toLocaleTimeString() || ""
+                      }
+                      latestMessage={chatRoom.lastMessage || "No messages yet"}
+                    />
+                  </div>
+                );
+              })
+            )}
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
