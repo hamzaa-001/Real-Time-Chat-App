@@ -67,13 +67,6 @@ const MessageInput = ({
     );
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key == "Enter") {
-      sendMessage();
-    }
-  };
-  window.addEventListener("keydown", handleKeyPress);
-
   return (
     <div>
       <div className="flex items-center p-4 border-t border-gray-200">

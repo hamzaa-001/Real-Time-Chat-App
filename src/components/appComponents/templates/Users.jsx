@@ -45,8 +45,6 @@ const Users = ({ userData, setSelectedChatRoom }) => {
     return unSubscribe;
   }, []);
 
-  console.log("UsersData ID:", userData?.id);
-
   const handleLogout = () => {
     signOut(auth).then(() => {
       router.push("/login");
@@ -60,7 +58,6 @@ const Users = ({ userData, setSelectedChatRoom }) => {
     }
 
     setLoading(true);
-    console.log("Fetching chatrooms for user:", userData.id);
 
     const chatRoomsQuery = query(
       collection(firestore, "chatrooms"),
@@ -74,7 +71,6 @@ const Users = ({ userData, setSelectedChatRoom }) => {
           ...doc.data(),
         }));
         setUserChatRooms(chatrooms);
-        console.log("Fetched chatrooms:", chatrooms);
       } else {
         console.log("No chatrooms found for this user.");
       }
@@ -90,8 +86,6 @@ const Users = ({ userData, setSelectedChatRoom }) => {
       return;
     }
 
-    console.log("Creating chat with user:", otherUser.id);
-
     const existingChatRoomQuery = query(
       collection(firestore, "chatrooms"),
       where("users", "array-contains", userData.id)
@@ -102,11 +96,7 @@ const Users = ({ userData, setSelectedChatRoom }) => {
 
       if (!existingChatRoomSnapshot.empty) {
         toast.error("ChatRoom already exists");
-        console.log(
-          "ChatRoom already exists for users:",
-          userData.id,
-          otherUser.id
-        );
+
         return;
       }
 
@@ -124,11 +114,8 @@ const Users = ({ userData, setSelectedChatRoom }) => {
         collection(firestore, "chatrooms"),
         chatRoomData
       );
-      console.log("ChatRoom Created with id", chatRoomRef.id);
       setActiveTab("chatroom");
-    } catch (error) {
-      console.log("Error creating chat room:", error.message);
-    }
+    } catch (error) {}
   };
 
   const openChat = (chatRoom) => {
