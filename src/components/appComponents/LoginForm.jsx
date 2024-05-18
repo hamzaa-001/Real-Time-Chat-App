@@ -63,11 +63,11 @@ const RegisterForm = () => {
   });
 
   return (
-    <section className="bg-slate-900 flex justify-center items-center">
+    <section className="bg-[#FBFBFD] flex justify-center items-center">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-6">
         <main className="flex items-center justify-center px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 lg:py-12 xl:col-span-6">
           <div className="max-w-xl lg:max-w-3xl">
-            <h1 className="text-center text-3xl text-white font-bold">
+            <h1 className="text-center text-3xl text-[#141414] font-bold">
               Flash Talk
             </h1>
 
@@ -80,7 +80,7 @@ const RegisterForm = () => {
               <div className="col-span-6">
                 <label
                   htmlFor="Email"
-                  className="block text-sm font-medium text-white/80"
+                  className="block text-sm font-medium text-[#323232]"
                 >
                   Email
                 </label>
@@ -89,7 +89,7 @@ const RegisterForm = () => {
                   type="email"
                   id="Email"
                   name="email"
-                  className={`mt-1 w-full p-2 rounded-md border-gray-200 bg-slate-600/40 text-sm text-white shadow-sm ${
+                  className={`mt-1 w-full p-2 rounded-lg border-2 border-[#4F5665] text-sm text-[#323232] shadow-sm ${
                     formik.errors.email ? "border-2 border-red-700" : ""
                   }`}
                   value={formik.values.email}
@@ -102,7 +102,7 @@ const RegisterForm = () => {
               <div className="col-span-6 ">
                 <label
                   htmlFor="Password"
-                  className="block text-sm font-medium text-white/80"
+                  className="block text-sm font-medium text-[#323232]"
                 >
                   Password
                 </label>
@@ -111,7 +111,7 @@ const RegisterForm = () => {
                   type="password"
                   id="Password"
                   name="password"
-                  className={`mt-1 w-full p-2 rounded-md border-gray-200 bg-slate-600/40 text-sm text-white shadow-sm ${
+                  className={`mt-1 w-full p-2 rounded-lg border-2 border-[#4F5665] text-sm text-[#323232] shadow-sm ${
                     formik.errors.password ? "border-2 border-red-700" : ""
                   }`}
                   value={formik.values.password}
@@ -124,13 +124,13 @@ const RegisterForm = () => {
               </div>
 
               <div className="col-span-6 ">
-                <p className="text-sm text-white/80">
+                <p className="text-sm text-[#323232]">
                   By creating an account, you agree to our &nbsp;
-                  <a href="#" className="text-white/80 underline">
+                  <a href="#" className="text-[#323232] underline">
                     terms and conditions
                   </a>
                   &nbsp; and &nbsp;
-                  <a href="#" className="text-white/80 underline">
+                  <a href="#" className="text-[#323232]underline">
                     privacy policy
                   </a>
                   .
@@ -140,13 +140,13 @@ const RegisterForm = () => {
               <div className="flex flex-col col-span-6 sm:flex sm:items-center sm:gap-4">
                 <button
                   type="submit"
-                  className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
+                  className="inline-block shrink-0 rounded-md border border-[#21978B] bg-[#21978B] px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-[#21978B] focus:outline-none focus:ring active:text-[#21978B]"
                   disabled={loading}
                 >
                   {loading ? "Logging in..." : "Login"}
                 </button>
 
-                <p className="mt-4 text-sm text-white sm:mt-0">
+                <p className="mt-4 text-sm text-[#323232] sm:mt-0">
                   Don&apos;t have an account? &nbsp;
                   <Link href="/register" className="underline">
                     Register

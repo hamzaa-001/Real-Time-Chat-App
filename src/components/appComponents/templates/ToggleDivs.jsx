@@ -17,13 +17,13 @@ const ToggleDivs = ({ name, latestMessage, time, type }) => {
                   alt="profile"
                 />
                 <div className="flex justify-between">
-                  <h2 className="text-lg text-white font-bold ">{name}</h2>
+                  <h2 className="text-lg text-[#141414]">{name}</h2>
                 </div>
               </div>
             </li>
           </ul>
           <span class="flex items-center -mt-2">
-            <span class="h-px flex-1 bg-white/50"></span>
+            <span class="h-px flex-1 bg-[#141414]"></span>
           </span>
         </>
       )}
@@ -41,18 +41,18 @@ const ToggleDivs = ({ name, latestMessage, time, type }) => {
                     alt="profile"
                   />
                   <div className="flex flex-col justify-between">
-                    <h2 className="text-lg text-white font-bold ">{name}</h2>
-                    <p className="text-xs text-white/80 truncate">
+                    <h2 className="text-lg text-[#141414] ">{name}</h2>
+                    <p className="text-xs text-[#323232] truncate">
                       {latestMessage}
                     </p>
                   </div>
                 </div>
-                <p className="text-white/80 text-xs">{time}</p>
+                <p className="text-[#323232] text-xs">{time}</p>
               </div>
             </li>
           </ul>
           <span class="flex items-center -mt-2">
-            <span class="h-px flex-1 bg-white/50"></span>
+            <span class="h-px flex-1 bg-[#323232]"></span>
           </span>
         </>
       )}

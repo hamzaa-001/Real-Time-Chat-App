@@ -69,12 +69,12 @@ const MessageInput = ({
 
   return (
     <div>
-      <div className="flex items-center p-4 border-t border-gray-200">
+      <div className="flex items-center p-4 border-t border-white/50">
         <Dialog>
           <DialogTrigger>
             <FaPaperclip
               className={` ${
-                image ? "text-blue-500" : "text-gray-500"
+                image ? "text-[#21978B]" : "text-gray-500"
               } mr-2 cursor-pointer`}
             />
           </DialogTrigger>
@@ -85,22 +85,24 @@ const MessageInput = ({
                 {imagePreview && (
                   <img
                     src={imagePreview}
-                    className="max-h-60 w-60 mb-4"
+                    className="max-h-60 w-full mb-4"
                     alt="image"
                   />
                 )}
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="mb-4"
-                />
-                <button
-                  className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
-                  onClick={() => handleUpload()}
-                >
-                  Upload
-                </button>
+                <div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="mb-4"
+                  />
+                  <button
+                    className="shrink-0 rounded-md border border-blue-600 bg-blue-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
+                    onClick={() => handleUpload()}
+                  >
+                    Upload
+                  </button>
+                </div>
                 {uploadProgress && (
                   <progress value={uploadProgress} max={100}></progress>
                 )}
@@ -112,7 +114,7 @@ const MessageInput = ({
         <input
           type="text"
           placeholder="Type a message..."
-          className="flex-1 border-none p-2 outline-none bg-slate-900 text-white"
+          className="flex-1 border-none p-2 outline-none bg-[#FBFBFD] text-[#141414]"
           value={message}
           onChange={(e) => {
             setMessage(e.target.value);

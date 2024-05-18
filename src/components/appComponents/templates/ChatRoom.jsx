@@ -6,6 +6,7 @@ import {
   addDoc,
   collection,
   doc,
+  getDoc,
   serverTimestamp,
   onSnapshot,
   query,
@@ -18,11 +19,12 @@ import MessageInput from "./MessageInput";
 
 const ChatRoom = ({ user, selectedChatRoom }) => {
   const me = selectedChatRoom?.myData;
-  const other = selectedChatRoom?.otherData;
+  const otherId = selectedChatRoom?.otherData?.id;
   const chatRoomId = selectedChatRoom?.id;
 
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [otherUserData, setOtherUserData] = useState(null);
   const [image, setImage] = useState("");
   const messagesContainerRef = useRef(null);
 
@@ -47,6 +49,24 @@ const ChatRoom = ({ user, selectedChatRoom }) => {
     return unSubscribe;
   }, [chatRoomId]);
 
+  useEffect(() => {
+    const fetchOtherUserData = async () => {
+      if (!otherId) {
+        return;
+      }
+      try {
+        const userDoc = await getDoc(doc(firestore, "users", otherId));
+        if (userDoc.exists()) {
+          setOtherUserData(userDoc.data());
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchOtherUserData();
+  }, [otherId]);
+
   const sendMessage = async () => {
     if (message.trim() === "" && !image) {
       return;
@@ -60,7 +80,7 @@ const ChatRoom = ({ user, selectedChatRoom }) => {
         time: serverTimestamp(),
         image: image || "",
         messageType: "text",
-        receiverId: other.id,
+        receiverId: otherId,
         timestamp: serverTimestamp(),
       };
 
@@ -73,22 +93,28 @@ const ChatRoom = ({ user, selectedChatRoom }) => {
         lastMessage: message,
         lastMessageTime: serverTimestamp(),
       });
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
   };
 
   return (
-    <div>
-      <div className="flex flex-col h-[590px] ">
-        <div className="flex-1 overflow-y-auto p-10">
+    <div className="flex flex-col h-[530px]">
+      <div className=" text-[#141414] flex items-center justify-center  border-b-2 mb-4">
+        <h2 className="text-2xl font-bold mb-4">
+          {otherUserData ? otherUserData.full_name : ""}
+        </h2>
+      </div>
+
+      <div className="flex flex-col h-full">
+        <div className="flex-1 overflow-y-auto p-4">
           {messages?.map((message, index) => (
-            <>
-              <MessageCard
-                key={index}
-                message={message}
-                me={me}
-                other={other}
-              />
-            </>
+            <MessageCard
+              key={index}
+              message={message}
+              me={me}
+              other={otherUserData}
+            />
           ))}
         </div>
 

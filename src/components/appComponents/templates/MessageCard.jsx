@@ -27,7 +27,7 @@ const MessageCard = ({ message, me, other }) => {
 
       <div
         className={`text-white p-2 rounded-md ${
-          isMessageFromMe ? "bg-blue-600" : "bg-gray-600 self-start"
+          isMessageFromMe ? "bg-[#21978B]" : "bg-[#4F5665] self-start"
         }`}
       >
         {message.image && (

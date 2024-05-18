@@ -134,32 +134,34 @@ const Users = ({ userData, setSelectedChatRoom }) => {
       <div className="flex justify-between">
         <button
           className={`rounded-md px-4 py-2 text-sm focus:relative ${
-            activeTab === "users" ? "bg-white" : "text-white"
+            activeTab === "users" ? "bg-[#21978B] text-white" : "text-[#141414]"
           }`}
           onClick={() => handleTabClick("users")}
         >
           Users
         </button>
         <button
-          className={`rounded-md px-4 py-2 text-sm shadow-sm focus:relative ${
-            activeTab === "chatroom" ? "bg-white" : "text-white"
+          className={`rounded-md px-4 py-2 text-sm focus:relative ${
+            activeTab === "chatroom"
+              ? "bg-[#21978B] text-white"
+              : "text-[#141414]"
           }`}
           onClick={() => handleTabClick("chatroom")}
         >
           Chatroom
         </button>
         <button
-          className="rounded-md px-4 py-2 text-sm shadow-sm focus:relative text-white"
+          className="rounded-md px-4 py-2 text-sm focus:relative text-white"
           onClick={handleLogout}
         >
-          <FaPowerOff className="text-2xl text-red-900" />
+          <FaPowerOff className="text-2xl text-rose-900" />
         </button>
       </div>
 
       <div>
         {activeTab === "users" && (
           <div>
-            <h1 className="text-white text-2xl font-bold my-5">Users</h1>
+            <h1 className="text-[#141414] text-2xl font-bold my-5">Users</h1>
             {loading ? (
               <p className="text-white">Loading...</p>
             ) : (
@@ -185,7 +187,7 @@ const Users = ({ userData, setSelectedChatRoom }) => {
         )}
         {activeTab === "chatroom" && (
           <div>
-            <h1 className="text-white text-2xl font-bold my-5">Chatroom</h1>
+            <h1 className="text-[#141414] text-2xl font-bold my-5">Chatroom</h1>
             {userChatRooms.length === 0 ? (
               <p className="text-white">No chatrooms found.</p>
             ) : (

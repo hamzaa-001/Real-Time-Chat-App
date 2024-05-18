@@ -31,11 +31,11 @@ const HomePage = () => {
 
   return (
     <>
-      <div className="flex bg-slate-900 h-screen w-full overflow-hidden ">
-        <div className="flex flex-col gap-5 w-1/4 h-screen py-10 px-5 shadow-lg bg-slate-950 rounded-xl">
+      <div className="flex bg-[#FBFBFD] h-screen w-full overflow-hidden ">
+        <div className="flex flex-col gap-5 w-1/4 h-screen py-10 px-5 border-r-[1px] border-[#323232]">
           <User userData={user} setSelectedChatRoom={setSelectedChatRoom} />
         </div>
-        <div className="w-3/4 py-10 px-5">
+        <div className="w-3/4 py-5 px-5">
           <ChatRoom user={user} selectedChatRoom={selectedChatRoom} />
         </div>
       </div>
